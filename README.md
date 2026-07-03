@@ -30,3 +30,5 @@ direct pushes (PRs are mandatory), and is enforced even for repo admins.
 
 To satisfy the PR title check, include a tag like `[GHPR-123]` in the PR title or
 description.
+
+<!-- test/pr-checks: trigger workflows to discover exact check-run names -->
