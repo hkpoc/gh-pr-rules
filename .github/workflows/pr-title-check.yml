@@ -1,0 +1,31 @@
+name: PR Title Check
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check-title:
+    name: PR Title Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate ticket tag in title or description
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          PATTERN='\[[A-Z]{2,10}-[0-9]+\]'
+          if echo "$PR_TITLE" | grep -qE "$PATTERN"; then
+            echo "Found ticket tag in PR title."
+            exit 0
+          fi
+          if echo "$PR_BODY" | grep -qE "$PATTERN"; then
+            echo "Found ticket tag in PR description."
+            exit 0
+          fi
+          echo "::error::PR title or description must contain a ticket tag like [GHPR-123]."
+          exit 1

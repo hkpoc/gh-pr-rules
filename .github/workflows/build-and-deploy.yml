@@ -1,0 +1,52 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore GhPrRules.sln
+
+      - name: Build
+        run: dotnet build GhPrRules.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test GhPrRules.sln --configuration Release --no-build --verbosity normal
+
+      - name: Pack
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: >
+          dotnet pack src/GhPrRules.Calculator/GhPrRules.Calculator.csproj
+          --configuration Release --no-build -o ./nupkgs
+          -p:PackageVersion=1.0.${{ github.run_number }}
+
+      - name: Add GitHub Packages source
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: >
+          dotnet nuget add source
+          --username hkpoc --password ${{ secrets.GITHUB_TOKEN }}
+          --store-password-in-clear-text --name github
+          "https://nuget.pkg.github.com/hkpoc/index.json"
+
+      - name: Push package to GitHub Packages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: >
+          dotnet nuget push "./nupkgs/*.nupkg"
+          --source github --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate

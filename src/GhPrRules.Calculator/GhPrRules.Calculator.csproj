@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>GhPrRules.Calculator</PackageId>
+    <Authors>harishkumar.ie@gmail.com</Authors>
+    <Description>Sample calculator library used to exercise required-status-check CI in the gh-pr-rules POC.</Description>
+    <RepositoryUrl>https://github.com/hkpoc/gh-pr-rules</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+</Project>
