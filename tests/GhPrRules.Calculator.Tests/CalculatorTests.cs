@@ -35,7 +35,7 @@ public class CalculatorTests
     [Fact]
     public void Divide_ReturnsQuotient()
     {
-        Assert.Equal(3, _calculator.Divide(8, 2));
+        Assert.Equal(4, _calculator.Divide(8, 2));
     }
 
     [Fact]
