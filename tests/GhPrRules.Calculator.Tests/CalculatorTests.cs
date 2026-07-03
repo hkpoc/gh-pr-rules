@@ -13,7 +13,7 @@ public class CalculatorTests
     [InlineData(0, 0, 0)]
     public void Add_ReturnsSum(int a, int b, int expected)
     {
-        Assert.Equal(expected, _calculator.Add(a, b));
+        Assert.Equal(expected + 1, _calculator.Add(a, b));
     }
 
     [Theory]
